@@ -6,9 +6,10 @@ const { obterToken } = require('../helpers/autenticacao');
 describe('Transferencias', () => {
   let token;
 
-  // Gera o token uma vez antes dos testes
-  before(async () => {
-    token = await obterToken('Julio.Lima', '123456');
+  before(async function () {
+
+    token = await obterToken('Julio.Lima', '123456'); // corrigido
+    expect(token, 'token inválido no login').to.be.a('string').and.not.empty;
   });
 
   describe('POST /transferencias', () => {
@@ -24,7 +25,10 @@ describe('Transferencias', () => {
           token: ''
         });
 
-      expect(response.status).to.equal(201); // se a API devolver 200, troque aqui
+      expect(
+        response.status,
+        `status inesperado. Body: ${JSON.stringify(response.body)}`
+      ).to.equal(201); 
     });
 
     it('deve retornar 422 quando valor < 10,00', async () => {
@@ -39,7 +43,10 @@ describe('Transferencias', () => {
           token: ''
         });
 
-      expect(response.status).to.equal(422);
+      expect(
+        response.status,
+        `status inesperado. Body: ${JSON.stringify(response.body)}`
+      ).to.equal(422);
     });
   });
 });
