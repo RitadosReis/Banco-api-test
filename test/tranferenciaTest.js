@@ -1,9 +1,10 @@
 const request = require('supertest')
 const { expect } = require('chai')
+require('dotenv').config()
 describe('Transferencias', () => {
     describe('POST /transfers', () => {
         it('deve retornar 200 quando valor igual ou acima de 10,00', async () => {
-            const respostalogin = await request('http://localhost:3000')
+            const respostalogin = await request(process.env.BASE_URL)
                 .post('/login')
                 .set('Content-Type', 'application/json')
                 .send({
@@ -12,7 +13,7 @@ describe('Transferencias', () => {
                 });
             const token = respostalogin.body.token
 
-            const response = await request('http://localhost:3000')
+            const response = await request(process.env.BASE_URL)
                 .post('/transferencias')
                 .set('Content-Type', 'application/json')
                 .set('Authorization', `Bearer ${token}`)
@@ -25,7 +26,7 @@ describe('Transferencias', () => {
             expect(response.status).to.equal(201);
         });
         it('deve retornar 422 quando valor abaixo de 10,00', async () => {
-            const respostalogin = await request('http://localhost:3000')
+            const respostalogin = await request(process.env.BASE_URL)
                 .post('/login')
                 .set('Content-Type', 'application/json')
                 .send({
